@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+.copilot-azure/
+.azure/
+.github/agents/
+.vscode/
+10.py
+ms.py
+python.py

@@ -1,0 +1,33 @@
+{
+  "name": "ai-smart-wellbeing-school",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@fluentui/react-components": "^9.68.0",
+    "@fluentui/react-icons": "^2.0.312",
+    "motion": "^12.23.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.7",
+    "@types/three": "^0.187.0",
+    "@vitejs/plugin-react": "^4.6.0",
+    "jsdom": "^26.1.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}
