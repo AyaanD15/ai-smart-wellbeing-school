@@ -200,19 +200,76 @@ export function InteractiveCampus3D(props: InteractiveCampus3DProps) {
       const rightFace = spec.width / 2;
 
       if (isGarden) {
-        addBox(group, spec.width, 0.12, spec.depth, '#899a7f', 0, groundLevel + 0.06, 0);
+        addBox(group, spec.width, 0.12, spec.depth, '#829b72', 0, groundLevel + 0.06, 0);
+        addBox(group, spec.width + 0.1, 0.08, spec.depth + 0.1, '#665642', 0, groundLevel + 0.02, 0);
         for (const [postX, postZ] of [
-          [-spec.width / 2 + 0.12, -spec.depth / 2 + 0.12],
-          [spec.width / 2 - 0.12, -spec.depth / 2 + 0.12],
-          [-spec.width / 2 + 0.12, spec.depth / 2 - 0.12],
-          [spec.width / 2 - 0.12, spec.depth / 2 - 0.12],
+          [-0.76, -0.54],
+          [0.76, -0.54],
+          [-0.76, 0.54],
+          [0.76, 0.54],
         ] as const) {
-          addBox(group, 0.13, 1.42, 0.13, '#755d43', postX, groundLevel + 0.78, postZ);
+          addBox(group, 0.12, 1.42, 0.12, '#76583e', postX, groundLevel + 0.78, postZ);
         }
-        addBox(group, spec.width + 0.2, 0.12, spec.depth + 0.2, '#546b4f', 0, groundLevel + 1.52, 0);
-        addBox(group, spec.width + 0.28, 0.09, spec.depth + 0.28, '#d4c7a8', 0, groundLevel + 1.63, 0);
-        addBox(group, 1.2, 0.1, 0.35, '#765d43', -0.55, groundLevel + 0.42, 0.28);
-        addBox(group, 1.2, 0.34, 0.08, '#806548', -0.55, groundLevel + 0.61, 0.43);
+        addBox(group, 1.72, 0.1, 0.12, '#5e4936', 0, groundLevel + 1.52, -0.54);
+        addBox(group, 1.72, 0.1, 0.12, '#5e4936', 0, groundLevel + 1.52, 0.54);
+        addBox(group, 0.12, 0.1, 1.2, '#5e4936', -0.76, groundLevel + 1.52, 0);
+        addBox(group, 0.12, 0.1, 1.2, '#5e4936', 0.76, groundLevel + 1.52, 0);
+        for (const slatX of [-0.58, -0.29, 0, 0.29, 0.58]) {
+          addBox(group, 0.07, 0.07, 1.16, '#ae885d', slatX, groundLevel + 1.62, 0);
+        }
+
+        addBox(group, 0.3, 0.09, 0.48, '#705640', -0.99, groundLevel + 0.12, -0.6);
+        addBox(group, 0.3, 0.09, 0.48, '#705640', 0.99, groundLevel + 0.12, 0.6);
+        for (const [x, z] of [[-0.99, -0.6], [0.99, 0.6]] as const) {
+          for (const offset of [-0.1, 0.1]) {
+            const shrub = new THREE.Mesh(
+              new THREE.SphereGeometry(0.16, 10, 8),
+              new THREE.MeshStandardMaterial({ color: offset < 0 ? '#587953' : '#739660', roughness: 0.92 }),
+            );
+            shrub.position.set(x + offset, groundLevel + 0.36, z);
+            shrub.castShadow = true;
+            shrub.receiveShadow = true;
+            group.add(shrub);
+          }
+        }
+
+        for (const [x, z] of [[0.82, 0.82], [0.82, 0.43], [0.82, 0.04], [0.82, -0.35], [0.82, -0.74]] as const) {
+          const stone = addBox(group, 0.48, 0.055, 0.3, '#c5bca8', x, groundLevel + 0.1, z);
+          stone.rotation.y = z === 0.43 || z === -0.35 ? 0.08 : -0.06;
+        }
+
+        for (const x of [-0.55, -0.28, 0, 0.28, 0.55]) {
+          addBox(group, 0.075, 0.08, 0.12, '#6d5139', x, groundLevel + 0.47, 0.34);
+          addBox(group, 0.075, 0.34, 0.1, '#6d5139', x, groundLevel + 0.72, 0.19);
+        }
+        for (const z of [0.28, 0.4]) {
+          addBox(group, 1.22, 0.07, 0.09, '#a8794e', -0.02, groundLevel + 0.53, z);
+        }
+        for (const z of [0.15, 0.24]) {
+          addBox(group, 1.22, 0.07, 0.09, '#a8794e', -0.02, groundLevel + 0.68, z);
+        }
+
+        for (const [x, z, petalColor] of [
+          [-1.04, 0.04, '#e8d28a'],
+          [-0.88, 0.1, '#d98678'],
+          [0.96, -0.1, '#e6d08b'],
+          [0.57, -0.87, '#d98678'],
+        ] as const) {
+          addCylinder(group, 0.018, 0.025, 0.28, '#4d7549', x, groundLevel + 0.25, z);
+          const flower = new THREE.Mesh(
+            new THREE.SphereGeometry(0.08, 10, 8),
+            new THREE.MeshStandardMaterial({ color: petalColor, roughness: 0.76 }),
+          );
+          flower.position.set(x, groundLevel + 0.43, z);
+          flower.castShadow = true;
+          group.add(flower);
+          const centre = new THREE.Mesh(
+            new THREE.SphereGeometry(0.03, 8, 6),
+            new THREE.MeshStandardMaterial({ color: '#e5a945', roughness: 0.78 }),
+          );
+          centre.position.set(x, groundLevel + 0.45, z);
+          group.add(centre);
+        }
       } else {
         const wall = addBox(group, spec.width, spec.height, spec.depth, spec.color, 0, centerY, 0);
         wall.material = new THREE.MeshStandardMaterial({
@@ -449,22 +506,53 @@ export function InteractiveCampus3D(props: InteractiveCampus3DProps) {
     controlStation.add(buzzer);
     buzzer.name = '5V demonstration buzzer';
 
-    addCylinder(scene, 0.055, 0.09, 1.85, '#826b4b', -4.25, groundLevel + 0.925, 3.55);
+    const windmillPosition = new THREE.Vector3(-4.2, 0, 2.35);
+    addCylinder(scene, 0.045, 0.075, 1.62, '#795c3f', windmillPosition.x, groundLevel + 0.81, windmillPosition.z);
+    for (const side of [-1, 1]) {
+      const brace = addBox(scene, 0.055, 1.38, 0.055, '#98734d', windmillPosition.x + side * 0.18, groundLevel + 0.75, windmillPosition.z);
+      brace.rotation.z = side * -0.25;
+    }
     const rotor = new THREE.Group();
-    rotor.position.set(-4.25, groundLevel + 1.85, 3.55);
-    for (let blade = 0; blade < 3; blade += 1) {
+    rotor.position.set(windmillPosition.x, groundLevel + 1.62, windmillPosition.z);
+    for (let blade = 0; blade < 4; blade += 1) {
       const propeller = new THREE.Group();
-      propeller.rotation.z = (blade * Math.PI * 2) / 3;
-      addBox(propeller, 0.13, 0.76, 0.09, '#f4b942', 0, 0.4, 0);
+      propeller.rotation.z = (blade * Math.PI * 2) / 4;
+      const sailShape = new THREE.Shape();
+      sailShape.moveTo(-0.035, 0.12);
+      sailShape.lineTo(-0.21, 0.4);
+      sailShape.lineTo(-0.18, 0.96);
+      sailShape.lineTo(0.18, 0.96);
+      sailShape.lineTo(0.21, 0.4);
+      sailShape.lineTo(0.035, 0.12);
+      const sail = new THREE.Mesh(
+        new THREE.ShapeGeometry(sailShape),
+        new THREE.MeshStandardMaterial({
+          color: blade % 2 === 0 ? '#f0e2c2' : '#d7bd8c',
+          roughness: 0.82,
+          side: THREE.DoubleSide,
+        }),
+      );
+      sail.position.z = 0.055;
+      sail.castShadow = true;
+      propeller.add(sail);
+      addBox(propeller, 0.045, 0.96, 0.045, '#79583b', 0, 0.58, 0);
       rotor.add(propeller);
     }
-    const hub = new THREE.Mesh(
-      new THREE.SphereGeometry(0.15, 16, 16),
-      new THREE.MeshStandardMaterial({ color: '#50746a', metalness: 0.15 }),
+    const axle = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.045, 0.045, 0.25, 12),
+      new THREE.MeshStandardMaterial({ color: '#554b3b', metalness: 0.55, roughness: 0.36 }),
     );
+    axle.rotation.x = Math.PI / 2;
+    axle.position.z = 0.09;
+    rotor.add(axle);
+    const hub = new THREE.Mesh(
+      new THREE.SphereGeometry(0.12, 16, 12),
+      new THREE.MeshStandardMaterial({ color: '#b9834b', metalness: 0.18, roughness: 0.48 }),
+    );
+    hub.position.z = 0.2;
     rotor.add(hub);
     scene.add(rotor);
-    rotor.name = 'Servo-powered garden windmill';
+    rotor.name = 'Four-sail garden windmill';
 
     addBox(scene, 0.9, 0.12, 0.3, '#765d43', -2.9, groundLevel + 0.36, 3.05);
     addBox(scene, 0.1, 0.34, 0.1, '#6d573f', -3.22, groundLevel + 0.17, 3.05);
@@ -532,6 +620,7 @@ export function InteractiveCampus3D(props: InteractiveCampus3DProps) {
     resizeObserver.observe(container);
 
     let servoElapsed = 0;
+    let windmillSpeed = 0;
     let lastLcdState = `${screenMessage}|${motionDetected}|${isDim}|${props.temperature}|${props.humidity}`;
     let previousFrameTime = performance.now();
     renderer.setAnimationLoop(() => {
@@ -539,7 +628,8 @@ export function InteractiveCampus3D(props: InteractiveCampus3DProps) {
       const delta = Math.min((currentFrameTime - previousFrameTime) / 1000, 0.05);
       previousFrameTime = currentFrameTime;
       const current = propsRef.current;
-      if (current.windmillOn) rotor.rotation.z += delta * 1.4;
+      windmillSpeed = THREE.MathUtils.damp(windmillSpeed, current.windmillOn ? 1.5 : 0, 3, delta);
+      rotor.rotation.z += delta * windmillSpeed;
       servoElapsed += delta;
       const servo = controlStation.getObjectByName('servoArm');
       if (servo) servo.rotation.y = THREE.MathUtils.degToRad(current.servoAngle + Math.sin(servoElapsed * 2.4) * 5);
